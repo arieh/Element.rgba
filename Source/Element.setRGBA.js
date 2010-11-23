@@ -10,7 +10,7 @@ authors:
 requires:
 - core/1.3: Core,Element
 
-provides: [Element.setStyle,Element.getStyle,Browser.Features.rgba]
+provides: [Element.setRGBA,Browser.Features.rgba]
 
 ...
 */
