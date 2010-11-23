@@ -9,45 +9,32 @@ authors:
 
 requires:
 - core/1.3: Core,Element
+- Element.rgba/1.0.1 : Element.setRGBA
 
-provides: [Element.setStyle,Element.getStyle]
+provides: [Element.setStyle,Element.עetStyle]
 
 ...
 */
- (function(){
+(function(o_setStyle,o_getStyle){
     
     if (!Browser.ie) return;
     
-    var old_set = Element.prototype.setStyle
-        , old_get = Element.prototype.getStyle
-        , set_regex = /rgba\(([0-9a-fA-F]{1,3}),([0-9a-fA-F]{1,3}),([0-9a-fA-F]{1,3}),(.*)\)/
+    var set_regex = /rgba\(([0-9a-fA-F]{1,3}),([0-9a-fA-F]{1,3}),([0-9a-fA-F]{1,3}),(.*)\)/
         , get_regex = /progid:DXImageTransform\.Microsoft\.gradient\(startColorstr=#(.{2,2})(.{6,6})/;
         
     Element.implement({
         setStyle : function setStyle(property,value){
-            if (!property.test(/background/)) old_set.apply(this,arguments);
+            if (!property.test(/background/)) o_setStyle.apply(this,arguments);
             
             var match = value.match(set_regex);
             
-            if (!match) old_set.apply(this,arguments);
-            
-            match.shift();
-            match[3]*=100;
-            
-            for (var i = 0; i<4; i++){
-                match[i] = match[i].toString(16);
-                if (match[i].length==1) match[i] = "0" + match[i];
+            if (!match){
+                o_setStyle.apply(this,arguments);
+                return;  
             }
             
-            
-            var alpha = match[3];
-            match.pop();
-            match.unshift(alpha);
-            
-            
-            this.style.backgroundColor = "transparent";
-            this.style.zoom = 1;                        
-            this.style.filter = "progid:DXImageTransform.Microsoft.gradient(startColorstr=#"+match.join("")+",endColorstr=#"+match.join("")+");"
+            match.shift();
+            this.setRGBA.apply(this,match);
             
             return this;
         }
@@ -56,7 +43,7 @@ provides: [Element.setStyle,Element.getStyle]
             
             var match = this.style.filter.match(get_regex);
             
-            if (!match) return old_get.apply(this,arguments);
+            if (!match) return o_getStyle.apply(this,arguments);
             
             var rgb = match[2].hexToRgb(true);
             
@@ -65,4 +52,4 @@ provides: [Element.setStyle,Element.getStyle]
     
     });
     
-    })();
+})(Element.prototype.setStyle,Element.prototype.setStyle);

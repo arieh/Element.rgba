@@ -1,11 +1,22 @@
 Element.setRGBA
 ========
-This package monkey-patches Element.getStyle and Element.setStyle to allow IE support for rgba background values.
+This package provides 2 ways of making Element set rgba background values in a cross browser fasion:
+
+1. a `setRGBA` method
+2. a monkey-patch to Element.setStyle and Element.getStyle
+
+The 2 packages come in seperate files, so you can choose to use only the setRGBA method.
 
 
 How to use
 ----------
-Just as you would use any other property:
+
+#### setRGBA
+    
+    #JS
+    el.setRGBA(1,230,25,0.75);
+    
+#### Monkey Patch
 
     #JS
     el.setStyle('background','rgba(1,2,3,0.5)');
