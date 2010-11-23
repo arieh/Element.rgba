@@ -17,7 +17,7 @@ provides: [Element.setStyle,Element.עetStyle]
 */
 (function(o_setStyle,o_getStyle){
     
-    if (!Browser.ie) return;
+    if (Browser.Features.rgba) return;
     
     var set_regex = /rgba\(([0-9a-fA-F]{1,3}),([0-9a-fA-F]{1,3}),([0-9a-fA-F]{1,3}),(.*)\)/
         , get_regex = /progid:DXImageTransform\.Microsoft\.gradient\(startColorstr=#(.{2,2})(.{6,6})/;
